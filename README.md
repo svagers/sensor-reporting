@@ -44,7 +44,7 @@ docker-compose up -d --build
 ```
 
 The application will be available at:
-- **Frontend**: http://localhost
+- **Frontend**: http://localhost:3002
 - **API**: http://localhost:8000
 - **API Admin**: http://localhost:8000/admin
 

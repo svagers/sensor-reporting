@@ -15,25 +15,14 @@ A full-stack application with Vue.js frontend and Django REST API backend, fully
 
 ## Quick Start
 
-### 1. Clone and Setup
+### 1. Setup Environment
 
 ```bash
-# Clone the repository (if not already done)
-git clone <your-repo-url>
-cd saftehnika
-
-# Copy environment file
+# Copy environment file (if .env doesn't exist)
 cp .env.example .env
 ```
 
-### 2. Configure Environment
-
-Edit `.env` file and update the following:
-- `SECRET_KEY`: Generate a secure random key for Django
-- `POSTGRES_PASSWORD`: Set a strong password for production
-- `DEBUG`: Set to `0` for production, `1` for development
-
-### 3. Build and Run
+### 2. Build and Run
 
 ```bash
 # Build and start all services
@@ -44,11 +33,11 @@ docker-compose up -d --build
 ```
 
 The application will be available at:
-- **Frontend**: http://localhost:3002
-- **API**: http://localhost:8000
+- **Frontend**: http://localhost:3002 (Vue welcome page)
+- **API**: http://localhost:8000 (Django API welcome endpoint)
 - **API Admin**: http://localhost:8000/admin
 
-### 4. Create Django Superuser (First Time)
+### 3. Create Django Superuser (Optional)
 
 ```bash
 docker-compose exec api python manage.py createsuperuser

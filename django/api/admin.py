@@ -1,9 +1,9 @@
 from django.contrib import admin
-from .models import SensorVariant, Metric, Unit, MetricUnit, Sensor, Measurement
+from .models import SensorType, Metric, Unit, MetricUnit, Sensor, Measurement
 
 
-@admin.register(SensorVariant)
-class SensorVariantAdmin(admin.ModelAdmin):
+@admin.register(SensorType)
+class SensorTypeAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'type_id', 'variant_id']
     list_filter = ['type_id', 'variant_id']
     search_fields = ['name', 'id']
@@ -30,8 +30,8 @@ class MetricUnitAdmin(admin.ModelAdmin):
 
 @admin.register(Sensor)
 class SensorAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'sensor_variant']
-    list_filter = ['sensor_variant']
+    list_display = ['id', 'name', 'sensor_type']
+    list_filter = ['sensor_type']
     search_fields = ['name', 'id']
 
 

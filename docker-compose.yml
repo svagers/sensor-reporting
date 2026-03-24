@@ -25,7 +25,7 @@ services:
       sh -c "python manage.py migrate --noinput &&
              gunicorn --bind 0.0.0.0:8000 --workers 2 --timeout 120 --access-logfile - --error-logfile - --log-level info config.wsgi:application"
     volumes:
-      # - ./django:/app  # Uncomment for development with live code reload
+      - ./django:/app
       - static_volume:/app/staticfiles
       - media_volume:/app/mediafiles
     ports:

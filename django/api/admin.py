@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import SensorVariant, Metric, Unit, Sensor, Measurement
+from .models import SensorVariant, Metric, Unit, MetricUnit, Sensor, Measurement
 
 
 @admin.register(SensorVariant)
@@ -17,9 +17,15 @@ class MetricAdmin(admin.ModelAdmin):
 
 @admin.register(Unit)
 class UnitAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'metric', 'precision', 'is_primary']
-    list_filter = ['metric', 'is_primary']
+    list_display = ['id', 'name', 'precision']
     search_fields = ['name', 'id']
+
+
+@admin.register(MetricUnit)
+class MetricUnitAdmin(admin.ModelAdmin):
+    list_display = ['id', 'metric', 'unit', 'is_primary']
+    list_filter = ['is_primary', 'metric']
+    search_fields = ['metric__name', 'unit__name']
 
 
 @admin.register(Sensor)

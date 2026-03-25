@@ -11,23 +11,12 @@ class SensorRepository:
         except SensorType.DoesNotExist:
             return None
     
-    def create_or_update_sensor_type(self, type_id: int, variant_id: int, name: str) -> SensorType:
-        sensor_type, created = SensorType.objects.update_or_create(
-            type_id=type_id,
-            variant_id=variant_id,
-            defaults={'name': name}
-        )
-        return sensor_type
-    
-    def create_or_update_sensor(self, id: int, name: str, sensor_type: SensorType) -> Sensor:
-        sensor, created = Sensor.objects.update_or_create(
-            id=id,
-            defaults={
-                'name': name,
-                'sensor_type': sensor_type
-            }
-        )
-        return sensor
+    def get_used_sensor_types(self) -> List[dict]:
+        sensor_types = SensorType.objects.filter(
+            sensors__isnull=False
+        ).distinct().values('id', 'type_id', 'variant_id', 'name')
+        
+        return list(sensor_types)
     
     @transaction.atomic
     def bulk_upsert(self, sensors: List[Sensor]) -> int:

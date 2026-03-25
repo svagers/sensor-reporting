@@ -1,7 +1,8 @@
-from datetime import datetime
 from typing import Optional, List
-from django.db import transaction
-from ..models import Measurement, Sensor, Metric, Unit, MetricUnit
+from django.db import transaction, connection
+from pypika import Query, Table, Case
+from pypika.functions import Max
+from ..models import Measurement, Metric, Unit, MetricUnit
 
 
 class MeasurementRepository:
@@ -19,28 +20,17 @@ class MeasurementRepository:
         except MetricUnit.DoesNotExist:
             return None
     
-    def create_or_update_measurement(self, sensor: Sensor, metric: Metric, unit: Unit, value: float, measured_at: datetime) -> Measurement:
-        measurement, created = Measurement.objects.update_or_create(
-            measured_at=measured_at,
-            metric=metric,
-            unit=unit,
-            defaults={
-                'sensor': sensor,
-                'value': value
-            }
-        )
-        return measurement
-    
     @transaction.atomic
     def bulk_upsert(self, measurements: List[Measurement]) -> int:
         for measurement in measurements:
             Measurement.objects.update_or_create(
-                measured_at=measurement.measured_at,
+                sensor=measurement.sensor,
                 metric=measurement.metric,
-                unit=measurement.unit,
                 defaults={
-                    'sensor': measurement.sensor,
-                    'value': measurement.value
+                    'value': measurement.value,
+                    'measured_at': measurement.measured_at,
+                    'unit': measurement.unit
                 }
             )
         return len(measurements)
+

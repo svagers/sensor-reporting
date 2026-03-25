@@ -94,7 +94,7 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'measurements',
                 'ordering': ['measured_at'],
-                'unique_together': {('measured_at', 'metric', 'unit')},
+                'unique_together': {('sensor', 'metric')},
                 'indexes': [
                     models.Index(fields=['sensor', 'metric', 'measured_at'], name='measurement_sensor__888def_idx'),
                     models.Index(fields=['measured_at'], name='measurement_measure_a57da4_idx'),

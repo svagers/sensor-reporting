@@ -12,7 +12,7 @@ class Measurement(models.Model):
     class Meta:
         db_table = 'measurements'
         ordering = ['measured_at']
-        unique_together = ('measured_at', 'metric', 'unit')
+        unique_together = ('sensor', 'metric')
         indexes = [
             models.Index(fields=['sensor', 'metric', 'measured_at']),
             models.Index(fields=['measured_at']),

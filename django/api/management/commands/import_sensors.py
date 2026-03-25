@@ -1,15 +1,13 @@
-import json
-import os
 from datetime import datetime
-from django.core.management.base import BaseCommand, CommandError
-from django.conf import settings
+from django.core.management.base import CommandError
 from django.utils import timezone
 from api.repositories import SensorRepository, MeasurementRepository
 from api.factories import SensorFactory, MeasurementFactory
 from api.serializers.sensor_import_serializers import SensorSerializer, MeasurementSerializer
+from .base_import_command import BaseImportCommand
 
 
-class Command(BaseCommand):
+class Command(BaseImportCommand):
     help = 'Import sensors and measurements data from JSON file'
 
     def __init__(self):
@@ -21,14 +19,34 @@ class Command(BaseCommand):
         self._imported_sensors = []
         self._imported_measurements = []
     
-    def error(self, message: str) -> None:
-        self.stdout.write(self.style.ERROR(message))
-    
-    def warn(self, message: str) -> None:
-        self.stdout.write(self.style.WARNING(message))
-    
-    def info(self, message: str) -> None:
-        self.stdout.write(self.style.SUCCESS(message))
+    def get_json_file_name(self) -> str:
+        return 'sensors.json'
+
+    def import_data(self, raw_data: dict) -> None:
+        for sensor_id, sensor_data in raw_data.items():
+            sensor_domain = self.make_sensor(sensor_id, sensor_data)
+            
+            if sensor_domain is not None:
+                self._imported_sensors.append(sensor_domain)
+        
+        for sensor_domain, metrics_data in self._imported_sensors:
+            for metric_id, measurement_data in metrics_data.items():
+                measurement_domain = self.make_measurement(sensor_domain, metric_id, measurement_data)
+                
+                if measurement_domain is not None:
+                    self._imported_measurements.append(measurement_domain)
+        
+        self.info(f'Collected {len(self._imported_sensors)} sensors and {len(self._imported_measurements)} measurements')
+        
+        sensors_saved = self._sensor_repo.bulk_upsert(
+            [sensor_domain for sensor_domain, _ in self._imported_sensors]
+        )
+        
+        self.info(f'Saved {sensors_saved} sensors')
+        
+        measurements_saved = self._measurement_repo.bulk_upsert(self._imported_measurements)
+        
+        self.info(f'Saved {measurements_saved} measurements')
     
     def make_sensor(self, sensor_id: str, sensor_data: dict):
         sensor_serializer = SensorSerializer(data=sensor_data)
@@ -94,37 +112,3 @@ class Command(BaseCommand):
         )
         
         return measurement_domain
-
-    def handle(self, *args, **options):
-        json_path = os.path.join(settings.BASE_DIR, 'data', 'sensors.json')
-        
-        if not os.path.exists(json_path):
-            raise CommandError(f'File not found: {json_path}')
-        
-        with open(json_path, 'r', encoding='utf-8') as f:
-            raw_data = json.load(f)
-        
-        for sensor_id, sensor_data in raw_data.items():
-            sensor_domain = self.make_sensor(sensor_id, sensor_data)
-            
-            if sensor_domain is not None:
-                self._imported_sensors.append(sensor_domain)
-        
-        for sensor_domain, metrics_data in self._imported_sensors:
-            for metric_id, measurement_data in metrics_data.items():
-                measurement_domain = self.make_measurement(sensor_domain, metric_id, measurement_data)
-                
-                if measurement_domain is not None:
-                    self._imported_measurements.append(measurement_domain)
-        
-        self.info(f'Collected {len(self._imported_sensors)} sensors and {len(self._imported_measurements)} measurements')
-        
-        sensors_saved = self._sensor_repo.bulk_upsert(
-            [sensor_domain for sensor_domain, _ in self._imported_sensors]
-        )
-        
-        self.info(f'Saved {sensors_saved} sensors')
-        
-        measurements_saved = self._measurement_repo.bulk_upsert(self._imported_measurements)
-        
-        self.info(f'Saved {measurements_saved} measurements')

@@ -11,7 +11,6 @@ class UnitSerializer(serializers.Serializer):
 class MetricSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     name = serializers.CharField(max_length=255)
-    units = UnitSerializer(many=True)
 
 
 class MetricsDataSerializer(serializers.Serializer):

@@ -56,3 +56,34 @@ class MetricRepository:
             unit=unit,
             defaults={'is_primary': True}
         )
+    
+    @transaction.atomic
+    def bulk_upsert_metrics(self, metrics: List[Metric]) -> int:
+        for metric in metrics:
+            Metric.objects.update_or_create(
+                id=metric.id,
+                defaults={'name': metric.name}
+            )
+        return len(metrics)
+    
+    @transaction.atomic
+    def bulk_upsert_units(self, units: List[Unit]) -> int:
+        for unit in units:
+            Unit.objects.update_or_create(
+                id=unit.id,
+                defaults={
+                    'name': unit.name,
+                    'precision': unit.precision
+                }
+            )
+        return len(units)
+    
+    @transaction.atomic
+    def bulk_upsert_metric_units(self, metric_units: List[MetricUnit]) -> int:
+        for metric_unit in metric_units:
+            MetricUnit.objects.update_or_create(
+                metric_id=metric_unit.metric_id,
+                unit_id=metric_unit.unit_id,
+                defaults={'is_primary': metric_unit.is_primary}
+            )
+        return len(metric_units)

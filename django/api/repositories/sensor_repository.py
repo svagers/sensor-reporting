@@ -40,3 +40,13 @@ class SensorRepository:
                 }
             )
         return len(sensors)
+    
+    @transaction.atomic
+    def bulk_upsert_sensor_types(self, sensor_types: List[SensorType]) -> int:
+        for sensor_type in sensor_types:
+            SensorType.objects.update_or_create(
+                type_id=sensor_type.type_id,
+                variant_id=sensor_type.variant_id,
+                defaults={'name': sensor_type.name}
+            )
+        return len(sensor_types)

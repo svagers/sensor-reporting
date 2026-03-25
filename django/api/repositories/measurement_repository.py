@@ -1,29 +1,46 @@
-from typing import List, Optional
+from datetime import datetime
+from typing import Optional, List
 from django.db import transaction
-from ..models import Measurement
+from ..models import Measurement, Sensor, Metric, Unit, MetricUnit
 
 
 class MeasurementRepository:
     
-    def create(self, **kwargs) -> Measurement:
-        return Measurement.objects.create(**kwargs)
-    
-    def get_by_id(self, id: int) -> Optional[Measurement]:
+    def get_metric(self, metric_id: int) -> Optional[Metric]:
         try:
-            return Measurement.objects.get(id=id)
-        except Measurement.DoesNotExist:
+            return Metric.objects.get(id=metric_id)
+        except Metric.DoesNotExist:
             return None
     
-    def get_all(self) -> List[Measurement]:
-        return list(Measurement.objects.all())
+    def get_primary_unit_for_metric(self, metric: Metric) -> Optional[Unit]:
+        try:
+            metric_unit = MetricUnit.objects.get(metric=metric, is_primary=True)
+            return metric_unit.unit
+        except MetricUnit.DoesNotExist:
+            return None
     
-    def get_by_sensor(self, sensor_id: int) -> List[Measurement]:
-        return list(Measurement.objects.filter(sensor_id=sensor_id))
-    
-    def get_by_metric(self, metric_id: int) -> List[Measurement]:
-        return list(Measurement.objects.filter(metric_id=metric_id))
+    def create_or_update_measurement(self, sensor: Sensor, metric: Metric, unit: Unit, value: float, measured_at: datetime) -> Measurement:
+        measurement, created = Measurement.objects.update_or_create(
+            measured_at=measured_at,
+            metric=metric,
+            unit=unit,
+            defaults={
+                'sensor': sensor,
+                'value': value
+            }
+        )
+        return measurement
     
     @transaction.atomic
-    def bulk_create(self, items: List[dict]) -> List[Measurement]:
-        objects = [Measurement(**item) for item in items]
-        return Measurement.objects.bulk_create(objects, ignore_conflicts=True)
+    def bulk_upsert(self, measurements: List[Measurement]) -> int:
+        for measurement in measurements:
+            Measurement.objects.update_or_create(
+                measured_at=measurement.measured_at,
+                metric=measurement.metric,
+                unit=measurement.unit,
+                defaults={
+                    'sensor': measurement.sensor,
+                    'value': measurement.value
+                }
+            )
+        return len(measurements)

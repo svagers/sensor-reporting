@@ -1,5 +1,5 @@
 from .welcome_view import welcome
-from .measurements_view import MeasurementsView
+from .sensors_view import SensorsView
 from .structure_view import StructureView
 
-__all__ = ['welcome', 'MeasurementsView', 'StructureView']
+__all__ = ['welcome', 'SensorsView', 'StructureView']

@@ -4,8 +4,7 @@ from rest_framework import status
 from api.reporters import SensorDataReporter
 
 
-class MeasurementsView(APIView):
+class SensorsView(APIView):
     def get(self, request):
-        xxx
-        measurements = SensorDataReporter().report()
-        return Response({'data': measurements}, status=status.HTTP_200_OK)
+        sensors = SensorDataReporter().report()
+        return Response({'data': sensors}, status=status.HTTP_200_OK)

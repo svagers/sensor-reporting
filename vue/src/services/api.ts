@@ -15,7 +15,7 @@ export interface StructureData {
   metrics: Metric[]
 }
 
-/** GET /measurements response body */
+/** GET /sensors response body */
 export interface SensorsResponse {
   data: RawSensorData[]
 }
@@ -103,7 +103,7 @@ class ApiClient {
   }
 
   async getSensors(): Promise<SensorsResponse> {
-    return this.request<SensorsResponse>('/measurements')
+    return this.request<SensorsResponse>('/sensors')
   }
 }
 

@@ -4,7 +4,7 @@
 
 import type { SensorType, Metric, Unit } from './structure'
 
-/** Raw sensor row from GET /measurements (numeric metric columns). */
+/** Raw sensor row from GET /sensors (numeric metric columns). */
 export interface RawSensorData {
   id: number
   name: string

@@ -1,4 +1,5 @@
 <template>
+  <Toast position="top-right" unstyled :pt="toastPt" />
   <OverlayError
     v-if="apiUnreachable"
     title="Can't reach the API"
@@ -22,12 +23,19 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
+import { useToast } from 'primevue/usetoast'
+import Toast from 'primevue/toast'
+import { toastPt } from '@/config/toastPt'
 import { loadStructure, structureLoading, structure } from '@/stores/structure'
 import { apiUnreachable } from '@/stores/connection'
+import { registerToastService } from '@/stores/toast'
 import { useSensors } from '@/composables/useSensors'
 import OverlayError from '@/components/app/OverlayError.vue'
 import DataTable from '@/components/app/DataTable.vue'
 import BlockUI from 'primevue/blockui'
+
+const toast = useToast()
+registerToastService(toast)
 
 const sensors = useSensors()
 

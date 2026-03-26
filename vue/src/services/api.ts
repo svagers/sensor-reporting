@@ -5,6 +5,7 @@
 
 import { env } from '@/config/env'
 import { markApiReachable, markApiUnreachable } from '@/stores/connection'
+import { showErrorToast } from '@/stores/toast'
 import type { SensorType, Metric } from '@/types/structure'
 import type { RawSensorData } from '@/types/sensor'
 
@@ -67,6 +68,10 @@ class ApiClient {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}))
+        showErrorToast(
+          'Request failed',
+          `The server returned ${response.status} ${response.statusText}.`
+        )
         throw new ApiError(
           `API request failed: ${response.statusText}`,
           response.status,
@@ -81,6 +86,11 @@ class ApiClient {
       }
       if (isNetworkFailure(error)) {
         markApiUnreachable()
+      } else {
+        showErrorToast(
+          'Request failed',
+          error instanceof Error ? error.message : 'Unknown error occurred'
+        )
       }
       throw new ApiError(
         error instanceof Error ? error.message : 'Unknown error occurred'

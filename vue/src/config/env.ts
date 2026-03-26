@@ -5,8 +5,18 @@
 
 const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api'
 
+const normalizedApiUrl = apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl
+
+/** Origin of the API server (e.g. http://localhost:8000) for links outside `/api`. */
+const apiOrigin = new URL(normalizedApiUrl).origin
+
+/** Swagger UI (OpenAPI) — same as Django root `/` and `/api/docs/`. */
+const apiDocsUrl = `${apiOrigin}/api/docs/`
+
 export const env = {
-  apiUrl: apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl,
+  apiUrl: normalizedApiUrl,
+  apiOrigin,
+  apiDocsUrl,
 } as const
 
 /**

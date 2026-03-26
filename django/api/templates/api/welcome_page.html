@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Saftehnika</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #f3f4f6;
+      color: #1f2937;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.25rem;
+      -webkit-font-smoothing: antialiased;
+    }
+    .wrap {
+      width: 100%;
+      max-width: 36rem;
+    }
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+      padding: 2.5rem 2rem;
+    }
+    @media (min-width: 640px) {
+      .card { padding: 3rem 2.5rem; }
+    }
+    .brand {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #9ca3af;
+      margin-bottom: 0.75rem;
+    }
+    h1 {
+      margin: 0 0 0.75rem;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #111827;
+      letter-spacing: -0.025em;
+    }
+    .lead {
+      margin: 0 0 2rem;
+      color: #6b7280;
+      font-size: 0.9375rem;
+      line-height: 1.6;
+    }
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border-top: 1px solid #f3f4f6;
+    }
+    .links a {
+      display: block;
+      padding: 1rem 0;
+      text-decoration: none;
+      color: #374151;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      border-bottom: 1px solid #f3f4f6;
+      transition: color 0.12s ease;
+    }
+    .links a:last-child { border-bottom: none; }
+    .links a:hover,
+    .links a:focus-visible {
+      color: #111827;
+      outline: none;
+    }
+    .links a span {
+      display: block;
+      font-size: 0.8125rem;
+      font-weight: 400;
+      color: #9ca3af;
+      margin-top: 0.25rem;
+      line-height: 1.45;
+    }
+    .links a code {
+      font-size: 0.8125rem;
+      color: #6b7280;
+      background: #f9fafb;
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+      border: 1px solid #f3f4f6;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <main class="card">
+      <div class="brand">API</div>
+      <h1>Saftehnika</h1>
+      <p class="lead">
+        Sensor structure and measurement endpoints. Use the OpenAPI schema for tooling, or Swagger UI to try requests in the browser.
+      </p>
+      <nav class="links" aria-label="API documentation">
+        <a href="{% url 'schema' %}">
+          OpenAPI schema
+          <span>Raw OpenAPI 3 document (YAML or JSON)</span>
+        </a>
+        <a href="{% url 'swagger-ui' %}">
+          Swagger UI
+          <span>Interactive docs at <code>/api/docs/</code></span>
+        </a>
+        <a href="{% url 'api-info' %}">
+          API info
+          <span>JSON message, status, and version</span>
+        </a>
+      </nav>
+    </main>
+  </div>
+</body>
+</html>

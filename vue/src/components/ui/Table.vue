@@ -1,12 +1,16 @@
 <template>
-  <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
+  <div>
+    <div class="mb-3 flex justify-end">
+      <ColumnControl :columns="columns" @columns-changed="onColumnsChanged" />
+    </div>
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
     <div class="overflow-auto max-h-[min(70vh,48rem)]">
       <table class="min-w-full border-separate border-spacing-0">
         <thead>
           <tr class="border-b border-gray-200">
             <th 
-              v-for="(column, index) in columns" 
-              :key="index"
+              v-for="(column, index) in visibleColumns" 
+              :key="column.columnKey"
               :class="[
                 'px-6 py-4 text-left align-bottom bg-gray-50',
                 index === 0
@@ -31,8 +35,8 @@
             class="group border-b border-gray-100 hover:bg-gray-50 transition-colors"
           >
             <td 
-              v-for="(column, colIndex) in columns" 
-              :key="colIndex"
+              v-for="(column, colIndex) in visibleColumns" 
+              :key="column.columnKey"
               :class="[
                 'px-6 py-3',
                 colIndex === 0
@@ -51,11 +55,13 @@
       </table>
     </div>
   </div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import type { Column } from '@/types/column'
+import ColumnControl from '@/components/ui/input/ColumnControl.vue'
 
 interface Props {
   columns: Column[]
@@ -63,6 +69,20 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+
+const selectedColumnKeys = ref<string[]>([])
+
+function onColumnsChanged(keys: string[]) {
+  selectedColumnKeys.value = keys
+  console.log(selectedColumnKeys.value)
+}
+
+const visibleColumns = computed<Column[]>(() => {
+  const keys = selectedColumnKeys.value
+  if (keys.length === 0) return props.columns
+  const allow = new Set(keys)
+  return props.columns.filter((c) => allow.has(c.columnKey))
+})
 
 interface SortState {
   columnKey: string
@@ -107,10 +127,8 @@ const sortedData = computed(() => {
 
 const handleSort = (columnKey: string) => {
   if (currentSort.value?.columnKey === columnKey) {
-    // Toggle direction for the same column
     currentSort.value.direction = currentSort.value.direction === 'asc' ? 'desc' : 'asc'
   } else {
-    // Set new column as sorted
     currentSort.value = {
       columnKey,
       direction: 'desc',

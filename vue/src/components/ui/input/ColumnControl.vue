@@ -1,0 +1,112 @@
+<template>
+  <div ref="rootRef" class="relative inline-flex">
+    <button
+      type="button"
+      class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border shadow-sm transition focus:outline-none"
+      :class="
+        open
+          ? 'border-gray-400 bg-gray-50 text-gray-800'
+          : 'border-gray-300 bg-white text-gray-600 hover:border-gray-400 hover:bg-gray-50'
+      "
+      :aria-expanded="open"
+      aria-haspopup="listbox"
+      aria-label="Column visibility"
+      @click.stop="open = !open"
+    >
+      <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M4 4h4v16H4V4zm6 0h4v16h-4V4zm6 0h4v16h-4V4z" />
+      </svg>
+    </button>
+
+    <div
+      v-show="open"
+      class="absolute right-0 top-full z-50 mt-1 min-w-[14rem] rounded-lg border border-gray-200 bg-white py-1 shadow-lg ring-1 ring-black/5"
+      role="listbox"
+    >
+      <template v-for="col in columns" :key="col.columnKey">
+        <button
+          v-if="col.disableable"
+          type="button"
+          class="flex w-full cursor-pointer items-center gap-3 whitespace-nowrap px-3 py-2 text-left text-sm text-gray-800 transition-colors hover:bg-gray-50 focus:outline-none"
+          role="option"
+          :aria-selected="isSelected(col.columnKey)"
+          @click.stop="toggle(col.columnKey)"
+        >
+          <svg
+            v-if="isSelected(col.columnKey)"
+            class="h-5 w-5 shrink-0 text-emerald-600"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 13l4 4L19 7"
+            />
+          </svg>
+          <svg
+            v-else
+            class="h-5 w-5 shrink-0 text-gray-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <rect x="4" y="4" width="16" height="16" rx="2" stroke="currentColor" stroke-width="2" />
+          </svg>
+          <span class="whitespace-nowrap">{{ col.label }}</span>
+        </button>
+      </template>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted } from 'vue'
+import type { Column } from '@/types/column'
+
+const props = defineProps<{
+  columns: Column[]
+}>()
+
+const emit = defineEmits<{
+  columnsChanged: [selectedColumnKeys: string[]]
+}>()
+
+const selectedColumnKeys = ref<string[]>(props.columns.map((c) => c.columnKey))
+
+const isSelected = (columnKey: string) =>
+  selectedColumnKeys.value.includes(columnKey)
+
+const toggle = (columnKey: string) => {
+  const next = new Set(selectedColumnKeys.value)
+  if (next.has(columnKey)) next.delete(columnKey)
+  else next.add(columnKey)
+  selectedColumnKeys.value = [...next]
+  emit('columnsChanged', selectedColumnKeys.value)
+}
+
+const open = ref(false)
+const rootRef = ref<HTMLElement | null>(null)
+
+const onDocumentPointerDown = (e: MouseEvent | PointerEvent) => {
+  const el = rootRef.value
+  if (!el || !open.value) return
+  const target = e.target as Node
+  if (!el.contains(target)) {
+    open.value = false
+  }
+}
+
+onMounted(() => {
+  emit('columnsChanged', selectedColumnKeys.value)
+  document.addEventListener('pointerdown', onDocumentPointerDown, true)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('pointerdown', onDocumentPointerDown, true)
+})
+</script>

@@ -6,7 +6,7 @@
           <h2 class="text-2xl font-semibold text-gray-900 mb-2">Sensor Measurements</h2>
           <p class="text-gray-600">{{ provider.data.value.length }} sensors found</p>
         </div>
-        
+
         <Table 
           :columns="provider.getColumns()" 
           :data="provider.data.value"

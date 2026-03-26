@@ -67,6 +67,8 @@ export function useMeasurements(): DataProvider<Sensor, MeasurementFilters> {
 
     columns.push({
       columnKey: 'name',
+      label: 'Sensor',
+      disableable: false,
       sortKey: (row) => row.name,
       headerComponent: PlainHeaderCell,
       headerProps: {
@@ -81,6 +83,8 @@ export function useMeasurements(): DataProvider<Sensor, MeasurementFilters> {
       structure.value.metrics.forEach(metric => {
         columns.push({
           columnKey: `metric_${metric.id}`,
+          label: metric.name,
+          disableable: true,
           sortKey: (row) => row[`metric_${metric.id}`]?.value ?? null,
           headerComponent: MetricHeaderCell,
           headerProps: {

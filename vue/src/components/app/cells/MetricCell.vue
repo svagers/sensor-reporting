@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Sensor, MetricValue } from '@/types/measurement'
+import type { Sensor, MetricValue } from '@/types/sensor'
 import { computed } from 'vue'
 
 interface Props {

@@ -5,7 +5,7 @@
 
 import { env } from '@/config/env'
 import type { StructureData } from '@/types/structure'
-import type { MeasurementsResponse, MeasurementFilters } from '@/types/measurement'
+import type { SensorsResponse } from '@/types/sensor'
 
 class ApiError extends Error {
   constructor(
@@ -64,10 +64,10 @@ class ApiClient {
     return this.request<StructureData>('/structure')
   }
 
-  async getMeasurements(filters?: MeasurementFilters): Promise<MeasurementsResponse> {
-    return this.request<MeasurementsResponse>('/measurements', {
+  async getSensors(): Promise<SensorsResponse> {
+    return this.request<SensorsResponse>('/measurements', {
       method: 'POST',
-      body: JSON.stringify(filters || {}),
+      body: JSON.stringify({}),
     })
   }
 }

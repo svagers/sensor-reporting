@@ -29,11 +29,11 @@
           type="button"
           class="flex w-full cursor-pointer items-center gap-3 whitespace-nowrap px-3 py-2 text-left text-sm text-gray-800 transition-colors hover:bg-gray-50 focus:outline-none"
           role="option"
-          :aria-selected="isSelected(col.columnKey)"
+          :aria-selected="isVisible(col.columnKey)"
           @click.stop="toggle(col.columnKey)"
         >
           <svg
-            v-if="isSelected(col.columnKey)"
+            v-if="isVisible(col.columnKey)"
             class="h-5 w-5 shrink-0 text-emerald-600"
             fill="none"
             viewBox="0 0 24 24"
@@ -73,24 +73,32 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  columnsChanged: [selectedColumnKeys: string[]]
+  columnsChanged: [visibleColumnKeys: string[]]
 }>()
 
-const selectedColumnKeys = ref<string[]>(props.columns.map((c) => c.columnKey))
-
-const isSelected = (columnKey: string) =>
-  selectedColumnKeys.value.includes(columnKey)
-
-const toggle = (columnKey: string) => {
-  const next = new Set(selectedColumnKeys.value)
-  if (next.has(columnKey)) next.delete(columnKey)
-  else next.add(columnKey)
-  selectedColumnKeys.value = [...next]
-  emit('columnsChanged', selectedColumnKeys.value)
-}
-
+const visibleColumnKeys = ref<string[]>(props.columns.map((c) => c.columnKey))
 const open = ref(false)
 const rootRef = ref<HTMLElement | null>(null)
+
+onMounted(() => {
+  emit('columnsChanged', visibleColumnKeys.value)
+  document.addEventListener('pointerdown', onDocumentPointerDown, true)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('pointerdown', onDocumentPointerDown, true)
+})
+
+const isVisible = (columnKey: string) =>
+  visibleColumnKeys.value.includes(columnKey)
+
+const toggle = (columnKey: string) => {
+  const next = new Set(visibleColumnKeys.value)
+  if (next.has(columnKey)) next.delete(columnKey)
+  else next.add(columnKey)
+  visibleColumnKeys.value = [...next]
+  emit('columnsChanged', visibleColumnKeys.value)
+}
 
 const onDocumentPointerDown = (e: MouseEvent | PointerEvent) => {
   const el = rootRef.value
@@ -100,13 +108,4 @@ const onDocumentPointerDown = (e: MouseEvent | PointerEvent) => {
     open.value = false
   }
 }
-
-onMounted(() => {
-  emit('columnsChanged', selectedColumnKeys.value)
-  document.addEventListener('pointerdown', onDocumentPointerDown, true)
-})
-
-onUnmounted(() => {
-  document.removeEventListener('pointerdown', onDocumentPointerDown, true)
-})
 </script>

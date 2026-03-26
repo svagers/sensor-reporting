@@ -3,7 +3,7 @@
  * Transforms raw API data into enriched Sensor objects
  */
 
-import type { RawSensorData, Sensor } from '@/types/measurement'
+import type { RawSensorData, Sensor } from '@/types/sensor'
 import { getSensorTypeById, getMetricById } from '@/stores/structure'
 
 /**

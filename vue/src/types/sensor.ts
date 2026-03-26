@@ -1,12 +1,10 @@
 /**
- * Measurement types
+ * Sensor row types, API payloads, and metric cells.
  */
 
 import type { SensorType, Metric, Unit } from './structure'
 
-/**
- * Raw sensor data from API
- */
+/** Raw sensor row from the API (numeric metric columns). */
 export interface RawSensorData {
   id: number
   name: string
@@ -14,18 +12,14 @@ export interface RawSensorData {
   [key: `metric_${number}`]: number | null
 }
 
-/**
- * Metric measurement with full metadata
- */
+/** One metric on a sensor with full metadata. */
 export interface MetricValue {
   value: number
   metric: Metric
   unit: Unit
 }
 
-/**
- * Transformed Sensor with mapped relationships
- */
+/** Sensor row after mapping structure (types, metric values). */
 export interface Sensor {
   id: number
   name: string
@@ -33,14 +27,7 @@ export interface Sensor {
   [key: `metric_${number}`]: MetricValue | undefined
 }
 
-export interface MeasurementsResponse {
+/** Response body for POST /measurements (sensor rows). */
+export interface SensorsResponse {
   data: RawSensorData[]
-}
-
-export interface MeasurementFilters {
-  sensor_id?: string
-  type_id?: string
-  start_date?: string
-  end_date?: string
-  [key: string]: string | undefined
 }

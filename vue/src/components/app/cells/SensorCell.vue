@@ -45,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Sensor } from '@/types/measurement'
+import type { Sensor } from '@/types/sensor'
 
 interface Props {
   data: Sensor

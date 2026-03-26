@@ -1,5 +1,5 @@
 /**
- * Structure types for global application data
+ * Structure domain types (units, metrics, sensor types).
  */
 
 export interface Unit {
@@ -19,9 +19,4 @@ export interface SensorType {
   type_id: number
   variant_id: number
   name: string
-}
-
-export interface StructureData {
-  sensor_types: SensorType[]
-  metrics: Metric[]
 }

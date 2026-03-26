@@ -1,10 +1,10 @@
 /**
- * Sensor row types, API payloads, and metric cells.
+ * Sensor rows and mapped view models.
  */
 
 import type { SensorType, Metric, Unit } from './structure'
 
-/** Raw sensor row from the API (numeric metric columns). */
+/** Raw sensor row from GET /measurements (numeric metric columns). */
 export interface RawSensorData {
   id: number
   name: string
@@ -25,9 +25,4 @@ export interface Sensor {
   name: string
   type: SensorType | null
   [key: `metric_${number}`]: MetricValue | undefined
-}
-
-/** Response body for POST /measurements (sensor rows). */
-export interface SensorsResponse {
-  data: RawSensorData[]
 }

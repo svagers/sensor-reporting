@@ -5,8 +5,8 @@
       class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border shadow-sm transition focus:outline-none"
       :class="
         open
-          ? 'border-gray-400 bg-gray-50 text-gray-800'
-          : 'border-gray-300 bg-white text-gray-600 hover:border-gray-400 hover:bg-gray-50'
+          ? 'border-aranet-muted bg-aranet-surface text-aranet-ink'
+          : 'border-aranet-border bg-aranet-white text-aranet-muted hover:border-aranet-muted hover:bg-aranet-surface'
       "
       :aria-expanded="open"
       aria-haspopup="listbox"
@@ -20,21 +20,21 @@
 
     <div
       v-show="open"
-      class="absolute right-0 top-full z-50 mt-1 min-w-[14rem] rounded-lg border border-gray-200 bg-white py-1 shadow-lg ring-1 ring-black/5"
+      class="absolute right-0 top-full z-50 mt-1 min-w-[14rem] rounded-lg border border-aranet-border bg-aranet-white py-1 shadow-aranet ring-1 ring-black/5"
       role="listbox"
     >
       <template v-for="col in columns" :key="col.columnKey">
         <button
           v-if="col.disableable"
           type="button"
-          class="flex w-full cursor-pointer items-center gap-3 whitespace-nowrap px-3 py-2 text-left text-sm text-gray-800 transition-colors hover:bg-gray-50 focus:outline-none"
+          class="flex w-full cursor-pointer items-center gap-3 whitespace-nowrap px-3 py-2 text-left text-sm text-aranet-ink transition-colors hover:bg-aranet-surface focus:outline-none"
           role="option"
           :aria-selected="isVisible(col.columnKey)"
           @click.stop="toggle(col.columnKey)"
         >
           <svg
             v-if="isVisible(col.columnKey)"
-            class="h-5 w-5 shrink-0 text-emerald-600"
+            class="h-5 w-5 shrink-0 text-aranet-green"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -49,7 +49,7 @@
           </svg>
           <svg
             v-else
-            class="h-5 w-5 shrink-0 text-gray-400"
+            class="h-5 w-5 shrink-0 text-aranet-faint"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"

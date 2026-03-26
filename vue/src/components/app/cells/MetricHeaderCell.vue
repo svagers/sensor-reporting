@@ -5,7 +5,7 @@
     :direction="direction"
   >
     <div class="flex flex-col gap-0.5">
-      <span class="text-xs text-gray-500 font-normal leading-tight">{{ metric.primary_unit.name }}</span>
+      <span class="text-xs font-normal leading-tight text-aranet-muted">{{ metric.primary_unit.name }}</span>
       <span class="text-sm font-semibold leading-tight">{{ metric.name }}</span>
     </div>
   </SortableHeaderCell>

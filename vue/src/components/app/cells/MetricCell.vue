@@ -1,8 +1,8 @@
 <template>
-  <div v-if="metricValue" class="text-gray-900 font-mono">
+  <div v-if="metricValue" class="font-mono text-aranet-ink">
     {{ metricValue.value.toFixed(metricValue.unit.precision) }}
   </div>
-  <div v-else class="text-gray-400">
+  <div v-else class="text-aranet-faint">
     -
   </div>
 </template>

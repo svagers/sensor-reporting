@@ -5,10 +5,13 @@
 html,
 body {
   height: 100%;
-  min-height: 100%;
-  background: linear-gradient(to bottom right, #f8fafc, #e2e8f0);
+  margin: 0;
+  @apply bg-aranet-page font-sans text-aranet-ink antialiased;
 }
 
 #app {
-  min-height: 100%;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }

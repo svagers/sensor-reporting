@@ -95,18 +95,11 @@ class Command(BaseImportCommand):
             self.warn(f'Metric {metric_id} not found. Skipping measurement for sensor {sensor_domain.id}')
             return None
         
-        unit = self._measurement_repo.get_primary_unit_for_metric(metric)
-        
-        if unit is None:
-            self.warn(f'Primary unit not found for metric {metric.name} (ID: {metric_id}). Skipping measurement')
-            return None
-        
         measured_at = datetime.fromtimestamp(timestamp, tz=timezone.utc)
         
         measurement_domain = self._measurement_factory.create_measurement(
             sensor=sensor_domain,
             metric=metric,
-            unit=unit,
             value=value,
             measured_at=measured_at
         )

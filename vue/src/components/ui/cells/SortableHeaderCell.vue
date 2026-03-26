@@ -1,11 +1,11 @@
 <template>
   <div 
-    class="flex items-end justify-between cursor-pointer select-none text-gray-700 hover:text-blue-600 transition-colors text-sm"
+    class="flex items-end justify-between cursor-pointer select-none text-aranet-muted transition-colors text-sm hover:text-aranet-red"
     @click="emit('sort', columnKey)"
   >
     <slot></slot>
     
-    <span v-if="is_ordered" class="flex items-center text-blue-600 ml-2">
+    <span v-if="is_ordered" class="ml-2 flex items-center text-aranet-red">
       <svg
         v-if="direction === 'asc'"
         xmlns="http://www.w3.org/2000/svg"

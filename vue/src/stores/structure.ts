@@ -5,8 +5,8 @@
  */
 
 import { ref, readonly } from 'vue'
-import { apiClient } from '@/services/api'
-import type { StructureData, SensorType, Metric } from '@/types/structure'
+import { apiClient, type StructureData } from '@/services/api'
+import type { SensorType, Metric } from '@/types/structure'
 
 const data = ref<StructureData | null>(null)
 const isLoading = ref(false)

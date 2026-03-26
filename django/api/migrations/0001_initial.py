@@ -89,7 +89,6 @@ class Migration(migrations.Migration):
                 ('measured_at', models.DateTimeField()),
                 ('metric', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='measurements', to='api.metric')),
                 ('sensor', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='measurements', to='api.sensor')),
-                ('unit', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='measurements', to='api.unit')),
             ],
             options={
                 'db_table': 'measurements',

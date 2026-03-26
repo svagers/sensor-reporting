@@ -2,18 +2,18 @@
   <div ref="rootRef" class="relative inline-flex">
     <button
       type="button"
-      class="inline-flex h-9 min-w-[14rem] max-w-md items-center gap-2 rounded-lg border px-3 text-left text-sm shadow-sm transition focus:outline-none focus:ring-2 focus:ring-gray-200"
+      class="inline-flex h-9 min-w-[14rem] max-w-md items-center gap-2 rounded border px-3 text-left text-sm shadow-[0_2px_5px_rgba(29,29,29,0.08)] transition focus:outline-none focus:ring-2 focus:ring-aranet-red/20"
       :class="
         open
-          ? 'border-gray-400 bg-gray-50 text-gray-900'
-          : 'border-gray-300 bg-white text-gray-900 hover:border-gray-400 hover:bg-gray-50'
+          ? 'border-aranet-muted bg-aranet-surface text-aranet-ink'
+          : 'border-aranet-border bg-aranet-white text-aranet-ink hover:border-aranet-muted hover:bg-aranet-surface'
       "
       aria-haspopup="listbox"
       :aria-expanded="open"
       :aria-label="`Sensor type: ${selectedLabel}. Open list`"
       @click.stop="open = !open"
     >
-      <span class="inline-flex shrink-0 items-center gap-2 text-gray-600" aria-hidden="true">
+      <span class="inline-flex shrink-0 items-center gap-2 text-aranet-muted" aria-hidden="true">
         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
           <path
             d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
@@ -22,7 +22,7 @@
       </span>
       <span class="min-w-0 flex-1 truncate whitespace-nowrap">{{ selectedLabel }}</span>
       <svg
-        class="h-4 w-4 shrink-0 text-gray-500 transition-transform"
+        class="h-4 w-4 shrink-0 text-aranet-muted transition-transform"
         :class="{ 'rotate-180': open }"
         viewBox="0 0 24 24"
         fill="none"
@@ -35,67 +35,57 @@
 
     <div
       v-show="open"
-      class="absolute left-0 top-full z-50 mt-1 w-[min(calc(100vw-2rem),22rem)] rounded-lg border border-gray-200 bg-white shadow-lg ring-1 ring-black/5"
+      class="absolute left-0 top-full z-50 mt-1 w-[min(calc(100vw-2rem),22rem)] rounded-lg border border-aranet-border bg-aranet-white shadow-aranet ring-1 ring-black/5"
       role="listbox"
     >
       <div class="max-h-[min(50vh,16rem)] overflow-y-auto overflow-x-auto py-1">
         <button
           type="button"
           role="option"
-          class="flex w-full min-w-0 cursor-pointer items-center gap-3 px-3 py-2 text-left text-sm text-gray-800 transition-colors hover:bg-gray-50 focus:outline-none"
+          class="flex w-full min-w-0 cursor-pointer items-center gap-3 px-3 py-2 text-left text-sm text-aranet-ink transition-colors hover:bg-aranet-surface focus:outline-none"
           :aria-selected="selectedTypeId === undefined"
           @click.stop="selectType(undefined)"
         >
-          <svg
+          <span
             v-if="selectedTypeId === undefined"
-            class="h-5 w-5 shrink-0 text-emerald-600"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+            class="inline-flex h-5 w-5 shrink-0 items-center justify-center text-aranet-green"
             aria-hidden="true"
           >
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg>
-          <svg
-            v-else
-            class="h-5 w-5 shrink-0 text-gray-400"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            aria-hidden="true"
-          >
-            <rect x="4" y="4" width="16" height="16" rx="2" stroke-width="2" />
-          </svg>
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+              />
+            </svg>
+          </span>
+          <span v-else class="inline-block h-5 w-5 shrink-0" aria-hidden="true" />
           <span class="whitespace-nowrap">All types</span>
         </button>
 
         <button
           type="button"
           role="option"
-          class="flex w-full min-w-0 cursor-pointer items-center gap-3 px-3 py-2 text-left text-sm text-gray-800 transition-colors hover:bg-gray-50 focus:outline-none"
+          class="flex w-full min-w-0 cursor-pointer items-center gap-3 px-3 py-2 text-left text-sm text-aranet-ink transition-colors hover:bg-aranet-surface focus:outline-none"
           :aria-selected="selectedTypeId === null"
           @click.stop="selectType(null)"
         >
-          <svg
+          <span
             v-if="selectedTypeId === null"
-            class="h-5 w-5 shrink-0 text-emerald-600"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+            class="inline-flex h-5 w-5 shrink-0 items-center justify-center text-aranet-green"
             aria-hidden="true"
           >
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg>
-          <svg
-            v-else
-            class="h-5 w-5 shrink-0 text-gray-400"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            aria-hidden="true"
-          >
-            <rect x="4" y="4" width="16" height="16" rx="2" stroke-width="2" />
-          </svg>
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+              />
+            </svg>
+          </span>
+          <span v-else class="inline-block h-5 w-5 shrink-0" aria-hidden="true" />
           <span class="whitespace-nowrap">No type</span>
         </button>
 
@@ -104,30 +94,25 @@
           :key="st.id"
           type="button"
           role="option"
-          class="flex w-full min-w-0 cursor-pointer items-center gap-3 px-3 py-2 text-left text-sm text-gray-800 transition-colors hover:bg-gray-50 focus:outline-none"
+          class="flex w-full min-w-0 cursor-pointer items-center gap-3 px-3 py-2 text-left text-sm text-aranet-ink transition-colors hover:bg-aranet-surface focus:outline-none"
           :aria-selected="selectedTypeId === st.id"
           @click.stop="selectType(st.id)"
         >
-          <svg
+          <span
             v-if="selectedTypeId === st.id"
-            class="h-5 w-5 shrink-0 text-emerald-600"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+            class="inline-flex h-5 w-5 shrink-0 items-center justify-center text-aranet-green"
             aria-hidden="true"
           >
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg>
-          <svg
-            v-else
-            class="h-5 w-5 shrink-0 text-gray-400"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            aria-hidden="true"
-          >
-            <rect x="4" y="4" width="16" height="16" rx="2" stroke-width="2" />
-          </svg>
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+              />
+            </svg>
+          </span>
+          <span v-else class="inline-block h-5 w-5 shrink-0" aria-hidden="true" />
           <span class="whitespace-nowrap">{{ st.name }}</span>
         </button>
       </div>

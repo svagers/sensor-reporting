@@ -1,11 +1,23 @@
 /**
  * API Client Service
- * Centralized HTTP client for all API calls
+ * Centralized HTTP client for all API calls.
  */
 
 import { env } from '@/config/env'
-import type { StructureData } from '@/types/structure'
-import type { SensorsResponse } from '@/types/sensor'
+import { markApiReachable, markApiUnreachable } from '@/stores/connection'
+import type { SensorType, Metric } from '@/types/structure'
+import type { RawSensorData } from '@/types/sensor'
+
+/** GET /structure response body */
+export interface StructureData {
+  sensor_types: SensorType[]
+  metrics: Metric[]
+}
+
+/** GET /measurements response body */
+export interface SensorsResponse {
+  data: RawSensorData[]
+}
 
 class ApiError extends Error {
   constructor(
@@ -16,6 +28,17 @@ class ApiError extends Error {
     super(message)
     this.name = 'ApiError'
   }
+}
+
+function isNetworkFailure(error: unknown): boolean {
+  if (error instanceof ApiError) return false
+  if (error instanceof DOMException && error.name === 'AbortError') return false
+  const msg = error instanceof Error ? error.message : String(error)
+  if (/failed to fetch|networkerror|load failed|connection refused|net::err/i.test(msg)) {
+    return true
+  }
+  if (error instanceof TypeError) return true
+  return false
 }
 
 class ApiClient {
@@ -40,6 +63,8 @@ class ApiClient {
         },
       })
 
+      markApiReachable()
+
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}))
         throw new ApiError(
@@ -54,6 +79,9 @@ class ApiClient {
       if (error instanceof ApiError) {
         throw error
       }
+      if (isNetworkFailure(error)) {
+        markApiUnreachable()
+      }
       throw new ApiError(
         error instanceof Error ? error.message : 'Unknown error occurred'
       )
@@ -65,10 +93,7 @@ class ApiClient {
   }
 
   async getSensors(): Promise<SensorsResponse> {
-    return this.request<SensorsResponse>('/measurements', {
-      method: 'POST',
-      body: JSON.stringify({}),
-    })
+    return this.request<SensorsResponse>('/measurements')
   }
 }
 

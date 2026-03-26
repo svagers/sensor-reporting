@@ -4,7 +4,7 @@
       <svg 
         v-if="!data.name || data.name.trim() === ''"
         xmlns="http://www.w3.org/2000/svg" 
-        class="h-4 w-4 text-amber-500" 
+        class="h-4 w-4 text-aranet-red" 
         fill="none" 
         viewBox="0 0 24 24" 
         stroke="currentColor"
@@ -14,7 +14,7 @@
       <span 
         :class="[
           'font-medium',
-          !data.name || data.name.trim() === '' ? 'text-amber-600 italic' : 'text-gray-900'
+          !data.name || data.name.trim() === '' ? 'text-aranet-red italic' : 'text-aranet-ink'
         ]"
       >
         {{ data.name && data.name.trim() !== '' ? data.name : 'Unnamed sensor' }}
@@ -25,7 +25,7 @@
       <svg 
         v-if="!data.type"
         xmlns="http://www.w3.org/2000/svg" 
-        class="h-3 w-3 text-amber-500" 
+        class="h-3 w-3 text-aranet-red" 
         fill="none" 
         viewBox="0 0 24 24" 
         stroke="currentColor"
@@ -35,7 +35,7 @@
       <span 
         :class="[
           'text-xs',
-          !data.type ? 'text-amber-600 italic' : 'text-gray-500'
+          !data.type ? 'text-aranet-red italic' : 'text-aranet-muted'
         ]"
       >
         {{ data.type ? data.type.name : 'Missing type' }}

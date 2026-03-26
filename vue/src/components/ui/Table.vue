@@ -1,14 +1,16 @@
 <template>
-  <div class="w-full bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
-    <div class="overflow-auto max-h-[min(70vh,48rem)]">
+  <div
+    class="flex min-h-0 min-w-0 w-full flex-1 flex-col overflow-hidden rounded-2xl border border-aranet-border bg-aranet-white shadow-aranet"
+  >
+    <div class="min-h-0 min-w-0 flex-1 overflow-auto overscroll-contain">
       <table class="min-w-full border-separate border-spacing-0">
         <thead>
-          <tr class="border-b border-gray-200">
+          <tr class="border-b border-aranet-border">
             <template v-for="column in columns" :key="column.columnKey">
               <th
                 v-if="isColumnVisible(column.columnKey)"
                 :class="[
-                  'px-6 py-4 text-left align-bottom bg-gray-50',
+                  'px-6 py-4 text-left align-bottom bg-aranet-surface',
                   column.columnKey === columns[0]?.columnKey
                     ? 'sticky left-0 top-0 z-30 shadow-[2px_0_8px_rgba(0,0,0,0.06)]'
                     : 'sticky top-0 z-20',
@@ -29,7 +31,7 @@
           <tr 
             v-for="(row, rowIndex) in sortedData" 
             :key="rowIndex" 
-            class="group border-b border-gray-100 hover:bg-gray-50 transition-colors"
+            class="group border-b border-aranet-border/60 transition-colors hover:bg-aranet-surface"
           >
             <template v-for="column in columns" :key="column.columnKey">
               <td
@@ -37,7 +39,7 @@
                 :class="[
                   'px-6 py-3',
                   column.columnKey === columns[0]?.columnKey
-                    ? 'sticky left-0 z-10 bg-white shadow-[2px_0_8px_rgba(0,0,0,0.06)] group-hover:bg-gray-50'
+                    ? 'sticky left-0 z-10 bg-aranet-white shadow-[2px_0_8px_rgba(0,0,0,0.06)] group-hover:bg-aranet-surface'
                     : '',
                 ]"
               >

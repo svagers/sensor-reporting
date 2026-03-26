@@ -42,3 +42,9 @@
    docker compose exec api python manage.py import_metrics
    docker compose exec api python manage.py import_sensors
    ```
+
+5. **Django admin** — create a superuser (interactive prompts for username, email, password), then open [http://localhost:8000/admin/](http://localhost:8000/admin/) in the browser:
+
+   ```bash
+   docker compose exec api python manage.py createsuperuser
+   ```

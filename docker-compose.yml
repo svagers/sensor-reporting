@@ -47,8 +47,13 @@ services:
     build:
       context: ./vue
       dockerfile: Dockerfile
+    volumes:
+      - ./vue:/app
+      - /app/node_modules
     ports:
-      - "3002:80"
+      - "3002:5173"
+    environment:
+      - VITE_API_URL=${API_URL}
     depends_on:
       - api
     networks:

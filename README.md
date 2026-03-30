@@ -48,3 +48,5 @@
    ```bash
    docker compose exec api python manage.py createsuperuser
    ```
+
+6. **Frontend** — open [http://localhost:3002](http://localhost:3002/) in the browser.
